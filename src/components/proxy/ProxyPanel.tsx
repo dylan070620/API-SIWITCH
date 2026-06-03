@@ -119,7 +119,7 @@ export function ProxyPanel({
   const handleSaveBasicConfig = async () => {
     if (!globalConfig) return;
 
-    // 校验地址格式（仅允许本机回环 IPv4 / IPv6 / localhost）
+    // 校验地址格式（IPv4 / IPv6 字面量 / localhost）
     const addressTrimmed = listenAddress.trim();
     const ipv4Regex = /^(\d{1,3}\.){3}\d{1,3}$/;
     const isValidIpv4 = (addr: string): boolean =>
@@ -128,26 +128,27 @@ export function ProxyPanel({
         const num = parseInt(n, 10);
         return num >= 0 && num <= 255;
       });
-    const isLoopbackIpv6 = (addr: string): boolean => {
+    // IPv6 字面量校验：必须含 `:` 且能在 [..] 包装后被 URL 解析器接受。
+    // 后端 (services/proxy.rs) 会把 `::` 改写成 `::1`，所以这里也接受 `::`。
+    const isValidIpv6 = (addr: string): boolean => {
       if (!addr.includes(":")) return false;
       try {
         new URL(`http://[${addr}]/`);
-        return addr === "::1";
+        return true;
       } catch {
         return false;
       }
     };
-    const isLoopbackIpv4 = (addr: string): boolean =>
-      isValidIpv4(addr) && addr.split(".")[0] === "127";
     const isValidAddress =
       addressTrimmed === "localhost" ||
-      isLoopbackIpv4(addressTrimmed) ||
-      isLoopbackIpv6(addressTrimmed);
+      addressTrimmed === "0.0.0.0" ||
+      isValidIpv4(addressTrimmed) ||
+      isValidIpv6(addressTrimmed);
     if (!isValidAddress) {
       toast.error(
         t("proxy.settings.invalidAddress", {
           defaultValue:
-            "地址无效，请输入本机回环地址（如 127.0.0.1、::1 或 localhost）",
+            "地址无效，请输入 IPv4（如 127.0.0.1）、IPv6（如 ::1）或 localhost",
         }),
       );
       return;

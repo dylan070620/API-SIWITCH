@@ -2197,7 +2197,7 @@
         "listenAddress": {
           "label": "Listen Address",
           "placeholder": "127.0.0.1",
-          "description": "Loopback address the routing server listens on (recommended: 127.0.0.1)"
+          "description": "IP address the routing server listens on (recommended: 127.0.0.1)"
         },
         "listenPort": {
           "label": "Listen Port",
@@ -2251,7 +2251,7 @@
         "saveFailed": "Save failed: {{error}}"
       },
       "invalidPort": "Invalid port, please enter a number between 1024-65535",
-      "invalidAddress": "Invalid address. Enter a loopback address such as 127.0.0.1, ::1, or localhost",
+      "invalidAddress": "Invalid address. Enter an IPv4 (e.g. 127.0.0.1), IPv6 (e.g. ::1), or localhost",
       "configSaved": "Routing configuration saved",
       "configSaveFailed": "Failed to save configuration",
       "restartRequired": "Restart routing service for address or port changes to take effect"

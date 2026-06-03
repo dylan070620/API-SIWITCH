@@ -99,8 +99,6 @@ impl Database {
         &self,
         config: GlobalProxyConfig,
     ) -> Result<(), AppError> {
-        validate_proxy_listen_address(&config.listen_address).map_err(AppError::InvalidInput)?;
-
         let conn = lock_conn!(self.conn);
 
         conn.execute(
@@ -446,8 +444,6 @@ impl Database {
 
     /// 更新代理配置（兼容旧接口，更新所有三行的公共字段）
     pub async fn update_proxy_config(&self, config: ProxyConfig) -> Result<(), AppError> {
-        validate_proxy_listen_address(&config.listen_address).map_err(AppError::InvalidInput)?;
-
         let conn = lock_conn!(self.conn);
 
         // 更新所有三行的公共字段

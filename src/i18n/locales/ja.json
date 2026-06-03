@@ -2197,7 +2197,7 @@
         "listenAddress": {
           "label": "リッスンアドレス",
           "placeholder": "127.0.0.1",
-          "description": "ルーティングサーバーがリッスンするループバックアドレス（推奨: 127.0.0.1）"
+          "description": "ルーティングサーバーがリッスンするIPアドレス（推奨: 127.0.0.1）"
         },
         "listenPort": {
           "label": "リッスンポート",
@@ -2251,7 +2251,7 @@
         "saveFailed": "保存に失敗しました: {{error}}"
       },
       "invalidPort": "無効なポートです。1024〜65535 の数値を入力してください",
-      "invalidAddress": "無効なアドレスです。127.0.0.1、::1、localhost などのループバックアドレスを入力してください",
+      "invalidAddress": "無効なアドレスです。IPv4（例: 127.0.0.1）、IPv6（例: ::1）、または localhost を入力してください",
       "configSaved": "ルーティング設定を保存しました",
       "configSaveFailed": "設定の保存に失敗しました",
       "restartRequired": "アドレスまたはポートの変更を反映するにはルーティングサービスの再起動が必要です"

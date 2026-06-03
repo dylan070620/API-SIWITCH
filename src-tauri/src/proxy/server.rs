@@ -59,20 +59,6 @@ pub struct ProxyServer {
     server_handle: Arc<RwLock<Option<JoinHandle<()>>>>,
 }
 
-fn listen_socket_addr(address: &str, port: u16) -> Result<SocketAddr, String> {
-    let host = if address.trim().eq_ignore_ascii_case("localhost") {
-        "127.0.0.1"
-    } else {
-        address.trim()
-    };
-    let socket = if host.contains(':') && !host.starts_with('[') {
-        format!("[{host}]:{port}")
-    } else {
-        format!("{host}:{port}")
-    };
-    socket.parse().map_err(|e| format!("无效的地址: {e}"))
-}
-
 impl ProxyServer {
     pub fn new(
         config: ProxyConfig,
@@ -111,11 +97,10 @@ impl ProxyServer {
             return Err(ProxyError::AlreadyRunning);
         }
 
-        validate_proxy_listen_address(&self.config.listen_address)
-            .map_err(ProxyError::ConfigError)?;
-
-        let addr = listen_socket_addr(&self.config.listen_address, self.config.listen_port)
-            .map_err(ProxyError::BindFailed)?;
+        let addr: SocketAddr =
+            format!("{}:{}", self.config.listen_address, self.config.listen_port)
+                .parse()
+                .map_err(|e| ProxyError::BindFailed(format!("无效的地址: {e}")))?;
 
         // 创建关闭通道
         let (shutdown_tx, shutdown_rx) = oneshot::channel();

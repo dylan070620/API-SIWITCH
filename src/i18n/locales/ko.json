@@ -2197,7 +2197,7 @@
         "listenAddress": {
           "label": "수신 주소",
           "placeholder": "127.0.0.1",
-          "description": "라우팅 서버가 수신하는 루프백 주소(권장: 127.0.0.1)"
+          "description": "라우팅 서버가 수신하는 IP 주소 (권장: 127.0.0.1)"
         },
         "listenPort": {
           "label": "수신 포트",
@@ -2251,7 +2251,7 @@
         "saveFailed": "저장 실패: {{error}}"
       },
       "invalidPort": "유효하지 않은 포트입니다. 1024~65535 사이의 숫자를 입력하세요",
-      "invalidAddress": "유효하지 않은 주소입니다. 127.0.0.1, ::1 또는 localhost 같은 루프백 주소를 입력하세요",
+      "invalidAddress": "유효하지 않은 주소입니다. IPv4(예: 127.0.0.1), IPv6(예: ::1) 또는 localhost를 입력하세요",
       "configSaved": "라우팅 구성이 저장되었습니다",
       "configSaveFailed": "구성 저장에 실패했습니다",
       "restartRequired": "주소 또는 포트 변경 사항을 적용하려면 라우팅 서비스를 재시작하세요"
