@@ -1,4 +1,26 @@
 use serde::{Deserialize, Serialize};
+use std::net::IpAddr;
+
+pub fn validate_proxy_listen_address(address: &str) -> Result<(), String> {
+    let trimmed = address.trim();
+    if trimmed.eq_ignore_ascii_case("localhost") {
+        return Ok(());
+    }
+
+    let normalized = trimmed
+        .strip_prefix('[')
+        .and_then(|value| value.strip_suffix(']'))
+        .unwrap_or(trimmed);
+
+    let ip = normalized
+        .parse::<IpAddr>()
+        .map_err(|_| "监听地址必须是 localhost 或本机回环 IP".to_string())?;
+    if ip.is_loopback() {
+        Ok(())
+    } else {
+        Err("监听地址必须是本机回环地址，不能使用 0.0.0.0、:: 或局域网/公网 IP".to_string())
+    }
+}
 
 /// 代理服务器配置
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -491,5 +513,22 @@ mod tests {
         let parsed: LogConfig = serde_json::from_str(&json).unwrap();
         assert!(parsed.enabled);
         assert_eq!(parsed.level, "debug");
+    }
+
+    #[test]
+    fn validate_proxy_listen_address_allows_loopback_only() {
+        for address in ["127.0.0.1", "127.10.20.30", "::1", "[::1]", "localhost"] {
+            assert!(
+                validate_proxy_listen_address(address).is_ok(),
+                "{address} should be allowed"
+            );
+        }
+
+        for address in ["0.0.0.0", "::", "192.168.1.2", "10.0.0.2", "example.com"] {
+            assert!(
+                validate_proxy_listen_address(address).is_err(),
+                "{address} should be rejected"
+            );
+        }
     }
 }
