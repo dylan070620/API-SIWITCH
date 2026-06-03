@@ -317,6 +317,8 @@ export interface Settings {
   useAppWindowControls?: boolean;
   // 启用 Claude 插件联动（写入 ~/.claude/config.json 的 primaryApiKey）
   enableClaudePluginIntegration?: boolean;
+  // 切换 Codex 第三方供应商时保留官方登录
+  preserveCodexOfficialAuthOnSwitch?: boolean;
   // 跳过 Claude Code 初次安装确认（写入 ~/.claude.json 的 hasCompletedOnboarding）
   skipClaudeOnboarding?: boolean;
   // 是否开机自启
